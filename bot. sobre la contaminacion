@@ -1,0 +1,46 @@
+import discord
+from discord.ext import commands
+import random
+
+# Intents (necesario para que Discord deje funcionar al bot)
+intents = discord.Intents.default()
+
+# Crea el bot con un prefijo (el comando empezará con !)
+bot = commands.Bot(command_prefix="!", intents=intents)
+
+# Lista de consejos para reducir residuos
+tips_residuos = [
+    "Usa una botella reutilizable en lugar de botellas de plástico.",
+    "Compra a granel para evitar envases innecesarios.",
+    "Lleva tu propia bolsa de tela al supermercado.",
+    "Reutiliza frascos de vidrio para almacenar comida.",
+    "Evita productos de un solo uso como cubiertos o platos de plástico.",
+    "Haz compost con los restos de comida.",
+    "Elige productos con empaques reciclables o biodegradables."
+]
+
+# Evento: cuando el bot se conecta
+@bot.event
+async def on_ready():
+    print(f"Bot conectado como {bot.user}")
+
+# Comando 1: !reducir
+@bot.command()
+async def reducir(ctx):
+    """Da un consejo aleatorio para reducir residuos."""
+    await ctx.send(random.choice(tips_residuos))
+
+# Comando 2: !como (para un objeto en específico)
+@bot.command()
+async def como(ctx, *, objeto):
+    """Explica cómo reducir un tipo de residuo."""
+    objeto = objeto.lower()
+
+    if "plástico" in objeto:
+        await ctx.send("Para reducir plástico, evita botellas, bolsas y productos de un solo uso. Usa alternativas reutilizables.")
+    elif "papel" in objeto:
+        await ctx.send("Reduce papel usando notas digitales, imprimiendo solo cuando sea necesario y reciclando todo el papel limpio.")
+    elif "comida" in objeto or "orgánico" in objeto:
+        await ctx.send("Reduce residuos orgánicos planificando tus comidas y haciendo compost.")
+    else:
+        await ctx.send("No tengo información específica, pero puedo darte un consejo general: reduce, reutiliza y recicla. 💚")
